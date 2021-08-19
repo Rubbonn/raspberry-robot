@@ -1,0 +1,20 @@
+{
+  "name": "raspberry-robot",
+  "version": "1.0.0",
+  "description": "Robot controllato da interfaccia web",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rubbonn/raspberry-robot.git"
+  },
+  "author": "Ruben Giuriato",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rubbonn/raspberry-robot/issues"
+  },
+  "homepage": "https://github.com/Rubbonn/raspberry-robot#readme",
+  "dependencies": {
+    "bootstrap": "^5.1.0",
+    "bootstrap-icons": "^1.5.0",
+    "jquery": "^3.6.0"
+  }
+}
