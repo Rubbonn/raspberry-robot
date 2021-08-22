@@ -2,10 +2,15 @@ from flask import Flask, render_template, request
 import gpiozero
 
 # Setup robot
+try:
+	pigpioFactory = gpiozero.pins.pigpio.PiGPIOFactory()
+except:
+	print('Impossibile collegarsi al servizio pigpiod, hai installato la libreria e avviato il servizio?')
+	exit(1)
 robot = gpiozero.Robot((17,4), (22,27), pwm=False)
-robot.stop()
-pwma = gpiozero.PWMOutputDevice(2, frequency=25000, initial_value=0.5)
-pwmb = gpiozero.PWMOutputDevice(3, frequency=25000, initial_value=0.5)
+robot.forward()
+pwma = gpiozero.PWMOutputDevice(2, frequency=25000, initial_value=0, pin_factory=pigpioFactory)
+pwmb = gpiozero.PWMOutputDevice(3, frequency=25000, initial_value=0, pin_factory=pigpioFactory)
 
 # Setup flask
 app = Flask(__name__)
@@ -16,19 +21,36 @@ def index():
 	return render_template("index.html")
 
 # Impostazione del movimento del robot
-@app.route("/set-direzione")
-def set_direzione():
-	direzione = request.args.get('direzione', 0, type=int)
-	if(direzione == 0):
-		robot.stop()
-	elif(direzione == 1):
-		robot.forward()
-	elif(direzione == 2):
-		robot.backward()
-	elif(direzione == 3):
-		robot.right()
-	elif(direzione == 4):
-		robot.left()
+@app.route("/set-controls")
+def set_controls():
+	# Prelevo i nuovi parametri
+	y = request.args.get('y', 0.0, type=float)
+	x = request.args.get('x', 0.0, type=float)
+	if(y == 0):
+		if(x == 0):
+			# Nel caso i joystick siano a 0 fermo il robot
+			robot.stop()
+		else:
+			# Nel caso uso solo il joystick destro, ruoto il robot ad una velocità proporzionale
+			if(x > 0):
+				pwma.value = pwmb.value = abs(x)
+				robot.right()
+			elif(x < 0):
+				pwma.value = pwmb.value = abs(x)
+				robot.left()
+	else:
+		# Imposto la velocità in base al joystick sinistro
+		pwma.value = pwmb.value = abs(y)
+		# Nel caso uso anche il joystick destro, rallento un motore per fare una curva
+		if(x > 0):
+			pwmb.value -= pwmb.value * abs(x)
+		elif(x < 0):
+			pwma.value -= pwma.value * abs(x)
+		# Imposto la direzione in base al joystick sinistro
+		if(y > 0):
+			robot.forward()
+		elif(y < 0):
+			robot.backward()
 	return ('', 204)
 
 if(__name__ == '__main__'):

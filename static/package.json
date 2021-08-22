@@ -15,6 +15,7 @@
   "dependencies": {
     "bootstrap": "^5.1.0",
     "bootstrap-icons": "^1.5.0",
+    "html5-joystick": "^1.1.6",
     "jquery": "^3.6.0"
   }
 }

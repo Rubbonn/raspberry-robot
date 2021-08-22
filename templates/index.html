@@ -7,40 +7,33 @@
 	</head>
 	<body>
 		<div class="container-fluid vh-100">
-			<div class="row justify-content-center align-items-center h-100">
-				<div class="col-6 text-center">
-					<div class="row">
-						<div class="col-12">
-							<button type="button" class="btn btn-primary btn-lg" style="padding:1.5rem 4rem;font-size:6.25rem;" onmousedown="direzione = direzioni.AVANTI" ontouchstart="direzione = direzioni.AVANTI" onmouseup="direzione = direzioni.STOP" ontouchend="direzione = direzioni.STOP"><i class="bi bi-caret-up-square"></i></button>
-						</div>
-					</div>
-					<div class="row mt-1">
-						<div class="col-12">
-							<button type="button" class="btn btn-primary btn-lg" style="padding:1.5rem 4rem;font-size:6.25rem;" onmousedown="direzione = direzioni.INDIETRO" ontouchstart="direzione = direzioni.INDIETRO" onmouseup="direzione = direzioni.STOP" ontouchend="direzione = direzioni.STOP"><i class="bi bi-caret-down-square"></i></button>
-						</div>
-					</div>
+			<div class="row h-100">
+				<div class="col-5">
+					<div id="joystick-left" style="height:85%;"></div>
 				</div>
-				<div class="col-6 text-start">
-					<button type="button" class="btn btn-primary btn-lg" style="position:relative;top:25%;padding:3.5rem 4rem;font-size:6.25rem;" onmousedown="direzione = direzioni.SINISTRA" ontouchstart="direzione = direzioni.SINISTRA" onmouseup="direzione = direzioni.STOP" ontouchend="direzione = direzioni.STOP"><i class="bi bi-caret-left-square"></i></button>
-					<button type="button" class="btn btn-primary btn-lg" style="position:relative;top:25%;padding:3.5rem 4rem;font-size:6.25rem;" onmousedown="direzione = direzioni.DESTRA" ontouchstart="direzione = direzioni.DESTRA" onmouseup="direzione = direzioni.STOP" ontouchend="direzione = direzioni.STOP"><i class="bi bi-caret-right-square"></i></button>
+				<div class="col-5 offset-2">
+					<div id="joystick-right" style="height:85%;"></div>
 				</div>
 			</div>
 		</div>
 		<script type="text/javascript" src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 		<script type="text/javascript" src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='node_modules/html5-joystick/joy.min.js') }}"></script>
 		<script type="text/javascript">
-			const direzioni = {
-					STOP: 0,
-					AVANTI: 1,
-					INDIETRO: 2,
-					DESTRA: 3,
-					SINISTRA: 4
-				};
-			let direzione = direzioni.STOP;
 			$(document).ready(function() {
-				$('button').on('mousedown mouseup touchstart touchend', function() {
-					$.get('{{ url_for('set_direzione') }}', {'direzione':direzione});
-				});
+				let joystickLeft = new JoyStick('joystick-left');
+				let joystickRight = new JoyStick('joystick-right');
+				let y = Math.min(Math.max((joystickLeft.GetY() / 100).toFixed(1), -1), 1);
+				let x = Math.min(Math.max((joystickRight.GetX() / 100).toFixed(1), -1), 1);
+				setInterval(function() {
+					let newY = Math.min(Math.max((joystickLeft.GetY() / 100).toFixed(1), -1), 1);
+					let newX = Math.min(Math.max((joystickRight.GetX() / 100).toFixed(1), -1), 1);
+					if(y != newY || x != newX) {
+						y = newY;
+						x = newX;
+						$.get('{{ url_for('set_controls') }}', {'y':y,'x':x});
+					}
+				}, 250);
 			});
 		</script>
 	</body>
