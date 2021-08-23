@@ -1,7 +1,19 @@
 from flask import Flask, render_template, request
 import gpiozero
+import subprocess
+from time import sleep
+
+# Setup servizio pigpiod
+print('Tento di avviare il servizio pigpiod...')
+servizioAvviato = subprocess.run(['sudo', 'service', 'pigpiod', 'start'])
+sleep(2)
+if(servizioAvviato.returncode != 0):
+	print('Impossibile avviare il servizio pigpiod, hai installato la libreria?')
+	exit(1)
+print('Servizio avviato!')
 
 # Setup robot
+print('Imposto GPIO')
 try:
 	pigpioFactory = gpiozero.pins.pigpio.PiGPIOFactory()
 except:
@@ -11,6 +23,7 @@ robot = gpiozero.Robot((17,4), (22,27), pwm=False)
 robot.forward()
 pwma = gpiozero.PWMOutputDevice(2, frequency=25000, initial_value=0, pin_factory=pigpioFactory)
 pwmb = gpiozero.PWMOutputDevice(3, frequency=25000, initial_value=0, pin_factory=pigpioFactory)
+print('GPIO impostati e pronti, avvio il webserver')
 
 # Setup flask
 app = Flask(__name__)
