@@ -3,7 +3,7 @@ Robot comandato da un Raspberry in python attraverso interfaccia web
 
 ## Schema dei collegamenti
 Il programma è stato sviluppato su un Raspberry 4 quindi lo schema dei pin potrebbe cambiare.
-Per controllare i motori ho utilizzato una breakout board con il chip TB6612FNG
+Per controllare i motori ho utilizzato una breakout board con il chip TB6612FNG.
 Di seguito i collegamenti dei pin
 
 Rpi4	->	IC  
@@ -22,8 +22,11 @@ Prima di utilizzare il programma bisogna installare il pacchetto **pigpio**, ins
 
 Dopo di che scaricate il codice e assicuratevi di installare le dipendenze di Python con: `pip install -r requirements.txt`
 
-Prima di avviare il programma bisogna avviare il servizio pigpiod con `sudo service pigpiod start` oppure avviarlo al boot con `sudo systemctl enable pigpiod`
+Prima di avviare il programma bisogna avviare il servizio pigpiod con `sudo service pigpiod start` oppure avviarlo al boot con `sudo systemctl enable pigpiod`<br/>
+In ogni caso il programma proverà ad avviarlo in automatico così che voi potete lanciare tutto in un passaggio.
 
 Poi basterà avviare il tutto con `python3 app.py`
 
 Il programma avvierà un server Flask in ascolto sulla porta 5000, recatevi all'indirizzo ip del vostro raspberry e avrete i due joystick con cui comandare il robot.
+
+Per riavviare o spegnere il Raspberry senza entrare in SSH potete premere sulle relative icone nella parte alta della pagina.

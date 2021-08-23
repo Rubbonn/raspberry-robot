@@ -66,5 +66,15 @@ def set_controls():
 			robot.backward()
 	return ('', 204)
 
+# Riavvio il raspberry
+@app.route("/reboot")
+def reboot():
+	subprocess.run(['sudo', 'reboot'])
+
+# Spengo il raspberry
+@app.route("/shutdown")
+def shutdown():
+	subprocess.run(['sudo', 'poweroff'])
+
 if(__name__ == '__main__'):
 	app.run(host='0.0.0.0')

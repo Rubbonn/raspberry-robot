@@ -7,6 +7,14 @@
 	</head>
 	<body>
 		<div class="container-fluid vh-100">
+			<div class="row mt-2 text-center justify-content-center">
+				<div class="col-1">
+					<a href="{{ url_for('shutdown') }}" class="btn btn-danger"><i class="bi bi-power"></i></a>
+				</div>
+				<div class="col-1">
+					<a href="{{ url_for('reboot') }}" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i></a>
+				</div>
+			</div>
 			<div class="row h-100">
 				<div class="col-5">
 					<div id="joystick-left" style="height:85%;"></div>
