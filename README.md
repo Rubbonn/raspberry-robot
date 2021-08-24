@@ -20,7 +20,8 @@ GND		->	STBY
 ## Istruzioni
 Prima di utilizzare il programma bisogna installare il pacchetto **pigpio**, installabile con: `sudo apt update && sudo apt install pigpio -y`
 
-Dopo di che scaricate il codice e assicuratevi di installare le dipendenze di Python con: `pip install -r requirements.txt`
+Dopo di che scaricate il codice e assicuratevi di installare le dipendenze di Python con: `pip install -r requirements.txt`<br/>
+Inoltre dovete scaricare i pacchetti necessari alla pagina web quindi recatevi nella cartella **static** e usate il comando `npm install`
 
 Prima di avviare il programma bisogna avviare il servizio pigpiod con `sudo service pigpiod start` oppure avviarlo al boot con `sudo systemctl enable pigpiod`<br/>
 In ogni caso il programma proverà ad avviarlo in automatico così che voi potete lanciare tutto in un passaggio.
